@@ -1,6 +1,6 @@
 # EgoTrip 🌞✈️
 
-> *Find the sunniest destinations within your flight radius. For high-performing individuals who value both vitamin D and plausible deniability.*
+> *For the discerning traveler who refuses to settle for pedestrian weather. Sophisticated destination recommendations with workspace intelligence for maintaining appearances.*
 
 [![Next.js](https://img.shields.io/badge/Next.js-15.2.4-black?style=flat&logo=next.js)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=flat&logo=typescript)](https://www.typescriptlang.org/)
@@ -8,17 +8,18 @@
 
 ## Overview
 
-EgoTrip is a sophisticated travel discovery app designed for founders, executives, and high-performing individuals who want to "work remotely" in sunny destinations while maintaining the illusion of productivity. Because your thoughts deserve better weather than your office provides.
+EgoTrip is a sophisticated travel discovery platform for those who refuse to settle for pedestrian atmospheric conditions. We've prepared destinations within your immediate flight radius with weather that meets your standards. Naturally, we've included workspace intelligence for maintaining appearances.
 
 ### Key Features
 
-- 🌍 **Location-Based Recommendations**: Find destinations within your flight radius
-- ☀️ **Sunshine Optimization**: Real-time weather data for optimal vitamin D intake
-- ✈️ **Flight Time Calculations**: Know exactly how long your "strategic retreat" will take
-- 🏖️ **Founder-Worthy Accommodations**: Properties vetted for both Instagram potential and standing desks
-- 🎭 **Plausible Deniability**: Maintain professional appearances while enjoying paradise
+- 🌍 **Your Closest Escapes**: Location-based recommendations within your flight radius
+- ☀️ **Atmospheric Excellence**: Real-time weather data for superior climate selection
+- ✈️ **Flight Time Intelligence**: Precise calculations for your strategic retreats
+- 🏖️ **Refined Destinations**: Curated properties that understand sophistication
+- 🎭 **Executive Arrangements**: Pre-crafted alibis for maintaining professional appearances
 - 🌙 **Dark/Light Mode**: Work in your preferred aesthetic
 - 📱 **Responsive Design**: Perfect for planning escapes on any device
+- 📱 **PWA Support**: Install as a mobile app for on-the-go planning
 
 ## Quick Start
 
@@ -32,7 +33,7 @@ EgoTrip is a sophisticated travel discovery app designed for founders, executive
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/egotrip.git
+   git clone https://github.com/gichigi/egotrip.git
    cd egotrip
    ```
 
@@ -98,11 +99,16 @@ egotrip/
 │   └── page.tsx           # Home page
 ├── components/            # Shared UI components
 │   └── ui/                # shadcn/ui components
-├── hooks/                 # Custom React hooks
 ├── lib/                   # Utility functions
 ├── public/                # Static assets
-│   └── images/            # Destination images
-└── styles/                # Additional styles
+│   ├── images/            # Destination images
+│   ├── manifest.json      # PWA manifest
+│   ├── robots.txt         # SEO crawling rules
+│   ├── sitemap.xml        # SEO sitemap
+│   ├── og-image.svg       # Social media preview
+│   ├── twitter-image.svg  # Twitter card image
+│   └── favicon files      # App icons and favicons
+└── scripts/               # Utility scripts
 ```
 
 ## Key Components
@@ -115,6 +121,7 @@ egotrip/
 
 ### Location Services
 - **Geolocation**: Automatic user location detection
+- **IP-based fallback**: Sophisticated location detection
 - **Manual selection**: Fallback location picker
 - **Flight calculations**: Distance and flight time estimates
 - **Default fallback**: Lisbon, Portugal (because it's always sunny somewhere)
@@ -144,7 +151,7 @@ The app uses Tailwind CSS with a custom design system:
 
 ### Brand Voice
 
-EgoTrip maintains a sophisticated, tongue-in-cheek tone. See [BRAND_VOICE.md](./BRAND_VOICE.md) for detailed guidelines.
+EgoTrip maintains a sophisticated, travel agent-focused tone. See [BRAND_VOICE.md](./BRAND_VOICE.md) for detailed guidelines on the elite travel agent archetype.
 
 ## Deployment
 
@@ -154,6 +161,8 @@ EgoTrip maintains a sophisticated, tongue-in-cheek tone. See [BRAND_VOICE.md](./
 2. **Add environment variables** in the Vercel dashboard
 3. **Deploy automatically** on every push to main
 
+**Live Demo**: [egotrip.vercel.app](https://egotrip.vercel.app)
+
 ### Other Platforms
 
 The app can be deployed to any platform that supports Next.js:
@@ -161,6 +170,24 @@ The app can be deployed to any platform that supports Next.js:
 - Railway
 - Render
 - AWS Amplify
+
+## SEO & Social Media
+
+### Built-in Features
+- **Open Graph tags**: Professional social media previews
+- **Twitter Cards**: Optimized for Twitter sharing
+- **PWA support**: Install as mobile app
+- **Sitemap**: Automatic SEO crawling
+- **Robots.txt**: Search engine optimization
+- **Favicons**: Complete icon set for all devices
+
+### Social Media Preview
+The app includes professionally designed social media preview images that automatically display when shared on:
+- LinkedIn
+- Twitter/X
+- Facebook
+- Discord
+- Slack
 
 ## Contributing
 
@@ -199,12 +226,11 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 Having trouble with your strategic planning? 
 
-- **Issues**: [GitHub Issues](https://github.com/yourusername/egotrip/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/yourusername/egotrip/discussions)
-- **Email**: [your-email@example.com](mailto:your-email@example.com)
+- **Issues**: [GitHub Issues](https://github.com/gichigi/egotrip/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/gichigi/egotrip/discussions)
 
 ---
 
-*Remember: "It's always sunny somewhere" - and now you can find exactly where that somewhere is.*
+*Remember: "Weather... matters" - and now you can find exactly where that weather meets your standards.*
 
-**Made with love in Portugal. All rights reserved while you pretend to work.** 🇵🇹
+**Made with sophistication in Portugal. All rights reserved for those who refuse to settle for... pedestrian weather.** 🇵🇹
