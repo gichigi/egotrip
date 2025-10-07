@@ -111,7 +111,12 @@ EgoTrip identifies the sunniest destinations within your immediate flight radius
 - ❌ "sophisticatedly sophisticated selections" - Awkward repetition
 - ❌ "premium premium experiences" - Unnecessary emphasis
 
-**Why these are bad:** They sound forced, don't add clarity, and make the copy feel artificial rather than naturally sophisticated.
+### **Illogical Statements**
+- ❌ "weather is non-negotiable" - You can't negotiate with weather; this makes no logical sense
+- ❌ "weather that meets your standards" - Weather doesn't "meet" standards; it simply exists
+- ❌ "atmospheric conditions that understand your needs" - Weather doesn't have understanding or needs
+
+**Why these are bad:** They sound forced, don't add clarity, and make the copy feel artificial rather than naturally sophisticated. Illogical statements break the sophisticated tone by being nonsensical.
 
 ## Brand Voice Examples
 
