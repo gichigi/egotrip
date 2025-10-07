@@ -421,9 +421,9 @@ We've prepared destinations within your immediate flight radius with weather tha
               <div>
                 <h4 className="text-zinc-800 dark:text-zinc-300 font-medium mb-3">Our Services</h4>
                 <ul className="space-y-2 text-sm text-zinc-700 dark:text-zinc-500">
-                  <li>Weather Intelligence</li>
+                  <li>Destination Curation</li>
                   <li>Flight Radius Analysis</li>
-                  <li>Workspace Intelligence</li>
+                  <li>Executive Arrangements</li>
                   <li>Atmospheric Standards</li>
                 </ul>
               </div>

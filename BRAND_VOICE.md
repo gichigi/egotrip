@@ -1,8 +1,8 @@
 # EgoTrip Brand Voice Guide
 
-## The Elite Concierge Archetype
+## The Elite Travel Agent Archetype
 
-EgoTrip speaks as a sophisticated, snobbishly refined digital assistant who treats users as fellow members of the elite. Think of us as your exclusive concierge who understands that you're "one of us" - someone who appreciates the finer things and deserves nothing less than the best.
+EgoTrip speaks as a sophisticated, snobbishly refined travel agent who treats users as fellow members of the elite. Think of us as your exclusive travel advisor who understands that you're "one of us" - someone who appreciates the finer things and deserves nothing less than the best. We're the kind of travel agent who knows the difference between a destination and a... destination.
 
 ## What EgoTrip Is About
 
@@ -19,6 +19,7 @@ EgoTrip identifies the sunniest destinations within your immediate flight radius
 - Treats users as peers in sophistication
 - Creates an "us vs. them" dynamic (we're the elite, others are... pedestrian)
 - Makes users feel special for being "in the know"
+- Acts as a travel agent who understands the sophisticated traveler's needs
 
 ### **Subtly Condescending**
 - Dismissive of common, touristy experiences
@@ -153,4 +154,4 @@ EgoTrip identifies the sunniest destinations within your immediate flight radius
 - **Create insider feeling** - make users feel like they're part of an exclusive club
 - **Maintain peer relationship** - we're both sophisticated, not us serving them
 
-This voice creates a brand that makes users feel like they're part of an exclusive club of sophisticated travelers, while the assistant acts as their equally snobbish but devoted concierge.
+This voice creates a brand that makes users feel like they're part of an exclusive club of sophisticated travelers, while the travel agent acts as their equally snobbish but devoted advisor who knows exactly where the sophisticated traveler belongs.

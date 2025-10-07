@@ -24,16 +24,20 @@ export default function Home() {
       <main className="px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20 max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 xl:gap-16 items-start">
           <div className="space-y-6 sm:space-y-8 lg:space-y-10">
-            <div className="inline-flex px-3 py-1 text-xs font-medium bg-zinc-100 text-zinc-600 dark:bg-zinc-800/50 dark:text-zinc-400 rounded-full">
+            <div className="inline-flex px-3 py-1 text-xs font-medium bg-amber-400/10 text-amber-400 border border-amber-400/20 rounded-full">
               For the discerning traveler
             </div>
 
             <h1 className="heading-primary">
-              For those who find bad weather rather... unacceptable.
+              For those who find cloudy skies... unacceptable.
             </h1>
 
             <p className="body-large text-zinc-400 max-w-2xl">
-              EgoTrip identifies the sunniest escapes within your immediate flight radius. Naturally.
+              EgoTrip identifies the sunniest escapes within your flight radius.
+            </p>
+
+            <p className="body-large text-zinc-400 max-w-2xl">
+              Naturally, we've curated these destinations specifically for someone of your... particular tastes. When your current atmospheric conditions become rather... pedestrian, we present you with alternatives that meet your elevated standards.
             </p>
 
             <div className="pt-4 sm:pt-6">
@@ -56,7 +60,7 @@ export default function Home() {
 
               <div className="space-y-8 lg:space-y-10">
                 <div className="space-y-3">
-                  <h3 className="heading-tertiary">Weather Intelligence</h3>
+                  <h3 className="heading-tertiary">Destination Curation</h3>
                   <p className="body-normal text-zinc-400">
                     We've eliminated the pedestrian process of cross-referencing weather apps. Instead, we present destinations with weather that meets your standards.
                   </p>
@@ -70,7 +74,7 @@ export default function Home() {
                 </div>
 
                 <div className="space-y-3">
-                  <h3 className="heading-tertiary">Workspace Intelligence</h3>
+                  <h3 className="heading-tertiary">Executive Arrangements</h3>
                   <p className="body-normal text-zinc-400">
                     Curated workspaces with Wi-Fi ratings and pre-crafted alibis. The sophisticated traveler requires both connectivity and... plausible deniability.
                   </p>
@@ -80,7 +84,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="mt-12 sm:mt-16 mb-12 sm:mb-16 border-t border-zinc-800 pt-8 sm:pt-10">
+        <div className="mt-12 sm:mt-16 mb-8 border-t border-zinc-800 pt-8 sm:pt-10">
           <div className="text-center mb-6 sm:mb-8">
             <p className="text-zinc-500 text-xs sm:text-sm uppercase tracking-wider">As seen advertised in</p>
           </div>
@@ -121,9 +125,9 @@ export default function Home() {
               <div>
                 <h4 className="text-zinc-300 font-medium mb-3">Our Services</h4>
                 <ul className="space-y-2 text-sm text-zinc-500">
-                  <li>Weather Intelligence</li>
+                  <li>Destination Curation</li>
                   <li>Flight Radius Analysis</li>
-                  <li>Workspace Intelligence</li>
+                  <li>Executive Arrangements</li>
                   <li>Atmospheric Standards</li>
                 </ul>
               </div>
