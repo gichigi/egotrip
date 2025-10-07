@@ -26,15 +26,12 @@ export const getWeatherForecast = cache(
         )
       }
 
-      // Log the API key (first 4 and last 4 characters only for security)
-      console.log(`Using API key: ${apiKey.substring(0, 4)}...${apiKey.substring(apiKey.length - 4)}`)
 
       let response
 
       // If coordinates are provided, use them instead of city name
       if (coordinates) {
         const coordUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${coordinates.lat}&lon=${coordinates.lng}&appid=${apiKey}&units=metric`
-        console.log(`Attempting API call with coordinates: ${coordUrl.replace(apiKey, "API_KEY")}`)
 
         try {
           response = await fetch(coordUrl, { next: { revalidate: 3600 } }) // Cache for 1 hour
@@ -49,7 +46,6 @@ export const getWeatherForecast = cache(
 
         // First try with city name only
         const cityOnlyUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${encodedCity}&appid=${apiKey}&units=metric`
-        console.log(`Attempting API call with city only: ${cityOnlyUrl.replace(apiKey, "API_KEY")}`)
 
         try {
           response = await fetch(cityOnlyUrl, { next: { revalidate: 3600 } }) // Cache for 1 hour
@@ -71,10 +67,7 @@ export const getWeatherForecast = cache(
             )
           }
 
-          console.log(`City-only request failed: Status ${response.status}, Message: ${JSON.stringify(responseData)}`)
-
           const cityCountryUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${encodedCity},${encodedCountry}&appid=${apiKey}&units=metric`
-          console.log(`Attempting API call with city and country: ${cityCountryUrl.replace(apiKey, "API_KEY")}`)
 
           try {
             response = await fetch(cityCountryUrl, { next: { revalidate: 3600 } })
@@ -97,8 +90,6 @@ export const getWeatherForecast = cache(
           )
         }
 
-        console.error(`Weather API error for ${city}, ${country}: ${response?.status} ${response?.statusText}`)
-        console.error(`Response data: ${JSON.stringify(responseData)}`)
         return generateFallbackForecast(city, "Unable to retrieve current weather. Showing historical averages.")
       }
 
@@ -113,8 +104,6 @@ export const getWeatherForecast = cache(
         )
       }
 
-      console.log(`Weather API response for ${city}, ${country}:`, JSON.stringify(data).substring(0, 500) + "...")
-      console.log(`Successfully fetched weather data for ${city}, ${country}`)
 
       // Extract 3-day forecast (every 24 hours)
       const forecast = data.list
@@ -143,7 +132,6 @@ export const getWeatherForecast = cache(
 
 // Update the fallback forecast generator to include an error message
 function generateFallbackForecast(cityName: string, errorMessage = "Using fallback weather data"): WeatherForecast[] {
-  console.log(`Generating fallback forecast data for ${cityName}`)
   console.log(`Generating fallback forecast data for ${cityName}`)
   const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
   const today = new Date().getDay()

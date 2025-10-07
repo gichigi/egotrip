@@ -2,19 +2,17 @@
 
 import type React from "react"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import {
   ChevronDown,
   Filter,
   Plane,
   Search,
-  SunMedium,
   Wifi,
   Wind,
   Heart,
   Check,
-  Loader2,
   Globe,
   Shield,
 } from "lucide-react"
@@ -43,6 +41,35 @@ import { LocationDisplay } from "../components/location-display"
 import { LoadingInterstitial } from "@/components/loading-interstitial"
 import { ThemeToggle } from "@/components/theme-toggle"
 
+// InfoIcon component
+function InfoIcon(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <circle cx="12" cy="12" r="10" />
+      <path d="M12 16v-4" />
+      <path d="M12 8h.01" />
+    </svg>
+  )
+}
+
+// Custom circular filled sun icon component
+const SunIcon = ({ className = "h-6 w-6" }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+    <circle cx="12" cy="12" r="8" />
+  </svg>
+)
+
 export default function DestinationsPage() {
   const {
     userLocation,
@@ -50,19 +77,17 @@ export default function DestinationsPage() {
     isLoading: isLoadingLocation,
     error: locationError,
     isUsingDefaultLocation,
-    refreshLocation,
+    requestLocation,
     setManualLocation,
   } = useLocation()
 
-  const [selectedCity, setSelectedCity] = useState<City | null>(null)
   const [cities, setCities] = useState<City[]>([])
   const [filteredCities, setFilteredCities] = useState<City[]>([])
   const [sortOption, setSortOption] = useState<"flightTime" | "sunshine">("flightTime")
   const [showFilters, setShowFilters] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
-  const [isLoadingWeather, setIsLoadingWeather] = useState(true)
+  const [isLoading, setIsLoading] = useState(true)
   const [weatherErrors, setWeatherErrors] = useState<Record<string, boolean>>({})
-  const [showInitialLoading, setShowInitialLoading] = useState(true)
   const [activeFilters, setActiveFilters] = useState<FilterOptions>({
     maxFlightTime: 8,
     minSunshineHours: 6,
@@ -72,90 +97,88 @@ export default function DestinationsPage() {
   })
 
   const [showLocationModal, setShowLocationModal] = useState(false)
+  const isInitializing = useRef(false)
 
   const { toast } = useToast()
 
-  // Initialize cities with calculated flight times based on user location
+  // Single consolidated initialization effect
   useEffect(() => {
-    if (!userLocation) return
-
-    const initializeCities = async () => {
-      setIsLoadingWeather(true)
+    if (isInitializing.current) return
+    
+    const initialize = async () => {
+      isInitializing.current = true
+      
+      // Request location (will fallback to Lisbon if needed)
+      const currentLocation = await requestLocation()
+      
+      // Initialize cities with weather data
       const errors: Record<string, boolean> = {}
-
-      // Start with static city data
-      const updatedCities = await Promise.all(
-        staticCities.map(async (city) => {
-          // Find coordinates for this city
-          const cityCoords = destinationCoordinates.find(
-            (coord) => coord.name === city.name && coord.country === city.country,
-          )
-
-          if (!cityCoords) {
-            console.warn(`No coordinates found for ${city.name}, ${city.country}`)
-            errors[city.name] = true
-            return city // Return original city if no coordinates found
-          }
-
-          // Calculate distance and flight time
-          const { flightTime } = calculateTravelInfo(userLocation, cityCoords.coordinates)
-
-          // Fetch weather forecast using coordinates
-          let forecast: WeatherForecast[] = city.forecast
-          let usingFallbackWeather = false
-
-          try {
-            const weatherForecast = await getWeatherForecast(
-              city.name,
-              city.country,
-              cityCoords.coordinates, // Pass coordinates for more reliable API calls
+      
+      try {
+        const updatedCities = await Promise.all(
+          staticCities.map(async (city) => {
+            const cityCoords = destinationCoordinates.find(
+              (coord) => coord.name === city.name && coord.country === city.country,
             )
 
-            if (weatherForecast && weatherForecast.length > 0) {
-              forecast = weatherForecast
-            } else {
+            if (!cityCoords) {
+              errors[city.name] = true
+              return city
+            }
+
+            const { flightTime } = calculateTravelInfo(currentLocation, cityCoords.coordinates)
+
+            let forecast: WeatherForecast[] = city.forecast
+            let usingFallbackWeather = false
+
+            try {
+              const weatherForecast = await getWeatherForecast(
+                city.name,
+                city.country,
+                cityCoords.coordinates,
+              )
+
+              if (weatherForecast && weatherForecast.length > 0) {
+                forecast = weatherForecast
+              } else {
+                usingFallbackWeather = true
+              }
+            } catch (error) {
               usingFallbackWeather = true
             }
-          } catch (error) {
-            console.error(`Error fetching weather for ${city.name}:`, error)
-            usingFallbackWeather = true
-          }
 
-          if (usingFallbackWeather) {
-            errors[city.name] = true
-          }
+            if (usingFallbackWeather) {
+              errors[city.name] = true
+            }
 
-          // Return updated city with calculated flight time and real weather
-          return {
-            ...city,
-            flightTime,
-            forecast,
-            usingFallbackWeather,
-          }
-        }),
-      )
+            return {
+              ...city,
+              flightTime,
+              forecast,
+              usingFallbackWeather,
+            }
+          }),
+        )
 
-      setCities(updatedCities)
-      setWeatherErrors(errors)
-      setIsLoadingWeather(false)
+        setCities(updatedCities)
+        setWeatherErrors(errors)
+        setIsLoading(false)
+        
+        // Show completion toast
+        toast({
+          title: isUsingDefaultLocation ? "Proceeding with Lisbon fallback" : "Location refined",
+          description: isUsingDefaultLocation
+            ? "Using Lisbon as your reference point for flight calculations."
+            : "Your location has been refined for accurate flight time calculations.",
+        })
+      } catch (error) {
+        setIsLoading(false)
+      }
     }
+    
+    initialize()
+  }, [])
 
-    initializeCities()
-  }, [userLocation])
-
-  // Add this new useEffect to show toast only after initial loading is complete
-  useEffect(() => {
-    if (!showInitialLoading && userLocation && !isLoadingLocation) {
-      // Only show toast when location is loaded and initial loading is complete
-      toast({
-        title: isUsingDefaultLocation ? "Using default location" : "Location detected",
-        description: isUsingDefaultLocation
-          ? `Showing destinations from ${locationName?.city || "Lisbon"}, ${locationName?.country || "Portugal"}.`
-          : "We've personalized destinations based on your location.",
-        variant: "default",
-      })
-    }
-  }, [showInitialLoading, userLocation, isLoadingLocation, isUsingDefaultLocation, locationName, toast])
 
   // Sort and filter cities based on selected options
   useEffect(() => {
@@ -224,34 +247,12 @@ export default function DestinationsPage() {
     )
   }
 
-  // Handle city selection/deselection
-  const handleCitySelect = (city: City) => {
-    if (selectedCity?.id === city.id) {
-      // If the same city is clicked again, close it
-      setSelectedCity(null)
-    } else {
-      // Otherwise, select the city
-      setSelectedCity(city)
-    }
+
+  // Show loading interstitial while initializing
+  if (isLoading) {
+    return <LoadingInterstitial onComplete={() => setIsLoading(false)} minDuration={6000} />
   }
 
-  // Show loading interstitial for at least 4 seconds
-  if (showInitialLoading) {
-    return <LoadingInterstitial onComplete={() => setShowInitialLoading(false)} minDuration={6000} />
-  }
-
-  // Only show loading state when we have no cities data
-  if (cities.length === 0 && isLoadingWeather) {
-    return (
-      <div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col items-center justify-center p-4">
-        <Loader2 className="h-12 w-12 text-amber-400 animate-spin mb-4" />
-        <h2 className="text-xl font-light">Finding your perfect escape...</h2>
-        <p className="text-zinc-400 mt-2 max-w-md text-center">
-          We're calculating sunshine hours and flight times based on your location.
-        </p>
-      </div>
-    )
-  }
 
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-100 overflow-x-hidden">
@@ -269,26 +270,22 @@ export default function DestinationsPage() {
       <main className="px-4 py-8 max-w-7xl mx-auto">
         <div className="flex flex-col gap-8">
           <div className="space-y-2">
-            <h1 className="text-3xl sm:text-4xl font-light tracking-tight">Your exit strategy</h1>
-            <p className="text-zinc-400 max-w-2xl">
-              Based on your location, we've shortlisted escapes with minimal travel time and maximum rays. We've even
-              included a few workspaces so you can keep up appearances.
+            <h1 className="heading-primary">Your Closest Escapes</h1>
+            <p className="body-large text-zinc-400 max-w-2xl">
+We've prepared destinations within your immediate flight radius with weather that meets your standards. Naturally, we've included workspace intelligence for maintaining appearances.
             </p>
 
             {/* Location display */}
-            {userLocation && (
-              <LocationDisplay
-                locationName={locationName}
-                isUsingDefaultLocation={isUsingDefaultLocation}
-                refreshLocation={refreshLocation}
-                setManualLocation={setManualLocation}
-              />
-            )}
+            <LocationDisplay
+              locationName={locationName}
+              isUsingDefaultLocation={isUsingDefaultLocation}
+              setManualLocation={setManualLocation}
+            />
 
             {Object.keys(weatherErrors).length > 0 && (
               <div className="text-xs text-blue-600 dark:text-blue-400 mb-4 flex items-center gap-1">
                 <InfoIcon className="h-3 w-3" />
-                <span>Using estimated weather data for some destinations</span>
+                <span>The weather service is being rather pedestrian today</span>
               </div>
             )}
           </div>
@@ -297,7 +294,7 @@ export default function DestinationsPage() {
             <div className="relative max-w-md">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-zinc-500 h-4 w-4" />
               <Input
-                placeholder="Search destinations"
+                placeholder="Refine your search"
                 className="pl-10 bg-white dark:bg-zinc-900 border-zinc-300 dark:border-zinc-800 text-zinc-800 dark:text-zinc-300"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -316,7 +313,7 @@ export default function DestinationsPage() {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="bg-white dark:bg-zinc-900 border-zinc-300 dark:border-zinc-800">
-                  <DropdownMenuLabel>Sort Options</DropdownMenuLabel>
+                  <DropdownMenuLabel>Refinement Options</DropdownMenuLabel>
                   <DropdownMenuSeparator className="bg-zinc-200 dark:bg-zinc-800" />
                   <DropdownMenuItem onClick={() => setSortOption("flightTime")} className="flex items-center gap-2">
                     <Plane className="h-4 w-4" />
@@ -324,7 +321,7 @@ export default function DestinationsPage() {
                     {sortOption === "flightTime" && <Check className="h-4 w-4 ml-auto" />}
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => setSortOption("sunshine")} className="flex items-center gap-2">
-                    <SunMedium className="h-4 w-4" />
+                    <SunIcon className="h-4 w-4 text-orange-500" />
                     Sunshine Hours
                     {sortOption === "sunshine" && <Check className="h-4 w-4 ml-auto" />}
                   </DropdownMenuItem>
@@ -343,7 +340,7 @@ export default function DestinationsPage() {
                 <Filter className="mr-2 h-4 w-4" />
                 Filter
                 {hasActiveFilters() && (
-                  <Badge variant="secondary" className="ml-2 bg-zinc-950 text-amber-400">
+                  <Badge variant="secondary" className="ml-2 bg-zinc-100 text-zinc-600 dark:bg-zinc-800/50 dark:text-zinc-400">
                     Active
                   </Badge>
                 )}
@@ -365,9 +362,6 @@ export default function DestinationsPage() {
               <CityCard
                 key={city.id}
                 city={city}
-                isSelected={selectedCity?.id === city.id}
-                onSelect={() => handleCitySelect(city)}
-                onClose={() => setSelectedCity(null)}
                 usingFallbackWeather={weatherErrors[city.name] || false}
               />
             ))}
@@ -375,11 +369,10 @@ export default function DestinationsPage() {
             {filteredCities.length === 0 && (
               <div className="col-span-full py-20 text-center">
                 <div className="space-y-4">
-                  <SunMedium className="h-12 w-12 text-zinc-700 mx-auto" />
-                  <h3 className="text-xl font-medium">No destinations match your criteria</h3>
+                  <SunIcon className="h-12 w-12 text-orange-500 mx-auto" />
+                  <h3 className="text-xl font-medium">No destinations meet your standards</h3>
                   <p className="text-zinc-500 max-w-md mx-auto">
-                    Perhaps your standards exceed what reality can offer. Consider adjusting your filters or accepting
-                    mediocrity.
+                    Your criteria appear rather... particular. Consider refining your requirements or accepting that not all destinations meet your elevated standards.
                   </p>
                   <Button
                     variant="outline"
@@ -401,41 +394,6 @@ export default function DestinationsPage() {
             )}
           </div>
 
-          {/* Coming Soon Features - Updated for better light mode readability */}
-          <div className="mt-8 border-t border-zinc-200 dark:border-zinc-800 pt-8">
-            <h2 className="text-xl font-light mb-6 text-zinc-800 dark:text-zinc-100">Coming Soon</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div className="bg-white/80 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 p-4 rounded-lg shadow-sm">
-                <div className="flex items-center gap-3 mb-3">
-                  <Wind className="h-5 w-5 text-zinc-600 dark:text-zinc-500" />
-                  <h3 className="font-medium text-zinc-800 dark:text-zinc-300">Air Cleanliness Index</h3>
-                </div>
-                <p className="text-sm text-zinc-700 dark:text-zinc-500">
-                  Because your lungs deserve the same exclusivity as your calendar.
-                </p>
-              </div>
-
-              <div className="bg-white/80 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 p-4 rounded-lg shadow-sm">
-                <div className="flex items-center gap-3 mb-3">
-                  <Wifi className="h-5 w-5 text-zinc-600 dark:text-zinc-500" />
-                  <h3 className="font-medium text-zinc-800 dark:text-zinc-300">Wi-Fi Strength Mapping</h3>
-                </div>
-                <p className="text-sm text-zinc-700 dark:text-zinc-500">
-                  For maintaining the illusion of productivity from any beach.
-                </p>
-              </div>
-
-              <div className="bg-white/80 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 p-4 rounded-lg shadow-sm">
-                <div className="flex items-center gap-3 mb-3">
-                  <Heart className="h-5 w-5 text-zinc-600 dark:text-zinc-500" />
-                  <h3 className="font-medium text-zinc-800 dark:text-zinc-300">Tinder Match Index</h3>
-                </div>
-                <p className="text-sm text-zinc-700 dark:text-zinc-500">
-                  Optimize for both sunshine and "networking opportunities."
-                </p>
-              </div>
-            </div>
-          </div>
         </div>
       </main>
 
@@ -455,39 +413,38 @@ export default function DestinationsPage() {
                 <span className="font-medium tracking-tight text-zinc-800 dark:text-zinc-100">EgoTrip</span>
               </div>
               <p className="text-zinc-700 dark:text-zinc-500 text-sm">
-                Where "out of office" meets "out of excuses" and "strategic thinking" is best done with a cocktail and a
-                view.
+                For the discerning traveler who understands that weather is non-negotiable. We've prepared sophisticated alternatives for those who refuse to settle for pedestrian atmospheric conditions.
               </p>
             </div>
 
             <div className="md:col-span-2 grid grid-cols-2 md:grid-cols-3 gap-8">
               <div>
-                <h4 className="text-zinc-800 dark:text-zinc-300 font-medium mb-3">Features</h4>
+                <h4 className="text-zinc-800 dark:text-zinc-300 font-medium mb-3">Our Services</h4>
                 <ul className="space-y-2 text-sm text-zinc-700 dark:text-zinc-500">
-                  <li>Sunshine Optimization</li>
+                  <li>Weather Intelligence</li>
                   <li>Flight Radius Analysis</li>
-                  <li>Plausible Deniability</li>
-                  <li>Workspace Alibis</li>
+                  <li>Workspace Intelligence</li>
+                  <li>Atmospheric Standards</li>
                 </ul>
               </div>
 
               <div>
-                <h4 className="text-zinc-800 dark:text-zinc-300 font-medium mb-3">Resources</h4>
+                <h4 className="text-zinc-800 dark:text-zinc-300 font-medium mb-3">For the Sophisticated</h4>
                 <ul className="space-y-2 text-sm text-zinc-700 dark:text-zinc-500">
-                  <li>Excuse Generator</li>
-                  <li>Slack Auto-Responder</li>
-                  <li>Tan Concealer Guide</li>
-                  <li>Strategic Thinking Poses</li>
+                  <li>Curated Destinations</li>
+                  <li>Wi-Fi Ratings</li>
+                  <li>Pre-crafted Alibis</li>
+                  <li>Exclusive Access</li>
                 </ul>
               </div>
 
               <div>
-                <h4 className="text-zinc-800 dark:text-zinc-300 font-medium mb-3">Legal</h4>
+                <h4 className="text-zinc-800 dark:text-zinc-300 font-medium mb-3">Discretion</h4>
                 <ul className="space-y-2 text-sm text-zinc-700 dark:text-zinc-500">
-                  <li>Plausible Deniability</li>
-                  <li>Alibi Verification</li>
                   <li>Privacy Policy</li>
                   <li>Terms of Service</li>
+                  <li>Plausible Deniability</li>
+                  <li>Confidentiality</li>
                 </ul>
               </div>
             </div>
@@ -495,8 +452,7 @@ export default function DestinationsPage() {
 
           <div className="border-t border-zinc-200 dark:border-zinc-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
             <p className="text-zinc-700 dark:text-zinc-600 text-sm mb-4 md:mb-0">
-              © {new Date().getFullYear()} EgoTrip. Made with love in Portugal. All rights reserved while you pretend to
-              work.
+              © {new Date().getFullYear()} EgoTrip. Curated in Portugal for the discerning traveler. All rights reserved for those who refuse to settle for pedestrian weather.
             </p>
 
             <div className="flex space-x-6">
@@ -512,24 +468,3 @@ export default function DestinationsPage() {
   )
 }
 
-// Missing InfoIcon component
-function InfoIcon(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <circle cx="12" cy="12" r="10" />
-      <path d="M12 16v-4" />
-      <path d="M12 8h.01" />
-    </svg>
-  )
-}

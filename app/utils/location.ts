@@ -1,8 +1,8 @@
 // Utility functions for location and distance calculations
 
 /**
- * Get default location without requesting browser geolocation
- * @returns Default location (Lisbon, Portugal)
+ * Get user location with browser geolocation API
+ * @returns User location or default location (Lisbon, Portugal)
  */
 export async function getUserLocation(): Promise<{
   location: { lat: number; lng: number }
@@ -12,11 +12,66 @@ export async function getUserLocation(): Promise<{
   // Default location (Lisbon, Portugal)
   const defaultLocation = { lat: 38.7223, lng: -9.1393 }
 
-  // Always return the default location without requesting browser geolocation
-  return {
-    location: defaultLocation,
-    isDefault: true,
-    errorMessage: null,
+  // Check if geolocation is supported
+  if (!navigator.geolocation) {
+    return {
+      location: defaultLocation,
+      isDefault: true,
+      errorMessage: "Geolocation not supported by this browser",
+    }
+  }
+
+  try {
+    // Request user's current position with a manual timeout
+    const position = await Promise.race([
+      new Promise<GeolocationPosition>((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(
+          (position) => resolve(position),
+          (error) => reject(error),
+          {
+            enableHighAccuracy: false,
+            timeout: 2000, // 2 seconds timeout
+            maximumAge: 0, // No cache
+          }
+        )
+      }),
+      new Promise<never>((_, reject) => {
+        setTimeout(() => reject(new Error("Location request timed out")), 2000)
+      })
+    ])
+
+    const userLocation = {
+      lat: position.coords.latitude,
+      lng: position.coords.longitude,
+    }
+
+    return {
+      location: userLocation,
+      isDefault: false,
+      errorMessage: null,
+    }
+  } catch (error) {
+    
+    let errorMessage = "Unable to get your location"
+    if (error instanceof GeolocationPositionError) {
+      switch (error.code) {
+        case error.PERMISSION_DENIED:
+          errorMessage = "Location access denied. Using default location."
+          break
+        case error.POSITION_UNAVAILABLE:
+          errorMessage = "Location information unavailable. Using default location."
+          break
+        case error.TIMEOUT:
+          errorMessage = "Location request timed out. Using default location."
+          break
+      }
+    }
+
+    return {
+      location: defaultLocation,
+      isDefault: true,
+      errorMessage,
+    }
   }
 }
 

@@ -41,6 +41,7 @@ export interface Workspace {
 export interface FilterOptions {
   maxFlightTime: number
   minSunshineHours: number
+  maxPrice: number
   exclusivity: string[]
   regions: string[]
 }
@@ -48,9 +49,6 @@ export interface FilterOptions {
 // Props for the CityCard component
 export interface CityCardProps {
   city: City
-  isSelected: boolean
-  onSelect: () => void
-  onClose: () => void
   usingFallbackWeather?: boolean
 }
 

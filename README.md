@@ -46,11 +46,8 @@ EgoTrip is a sophisticated travel discovery app designed for founders, executive
    ```
 
 3. **Set up environment variables**
-   ```bash
-   cp .env.example .env.local
-   ```
    
-   Edit `.env.local` and add your OpenWeatherMap API key:
+   Create a `.env` file and add your OpenWeatherMap API key:
    ```env
    OPEN_WEATHER_MAP_KEY=your_api_key_here
    ```
@@ -76,7 +73,7 @@ EgoTrip uses the OpenWeatherMap API for real-time weather data. To get started:
 1. Visit [OpenWeatherMap](https://openweathermap.org/api)
 2. Sign up for a free account
 3. Generate an API key
-4. Add it to your `.env.local` file
+4. Add it to your `.env` file
 
 The free tier includes:
 - 1,000 API calls per day

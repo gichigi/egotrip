@@ -5,6 +5,7 @@ import { MapPin, PenLine } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/components/ui/use-toast"
 import { LocationModal } from "./location-modal"
+import { LocationLoading } from "@/components/location-loading"
 
 interface LocationDisplayProps {
   locationName: { city: string; country: string } | null
@@ -12,7 +13,11 @@ interface LocationDisplayProps {
   setManualLocation: (location: { lat: number; lng: number; name: string; country: string }) => void
 }
 
-export function LocationDisplay({ locationName, isUsingDefaultLocation, setManualLocation }: LocationDisplayProps) {
+export function LocationDisplay({ 
+  locationName, 
+  isUsingDefaultLocation, 
+  setManualLocation 
+}: LocationDisplayProps) {
   const [showLocationModal, setShowLocationModal] = useState(false)
   const { toast } = useToast()
 
@@ -24,6 +29,7 @@ export function LocationDisplay({ locationName, isUsingDefaultLocation, setManua
       variant: "default",
     })
   }
+
 
   return (
     <div className="flex items-center justify-between bg-white/80 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 rounded-lg p-3 mb-6 backdrop-blur-sm shadow-sm">
@@ -38,15 +44,17 @@ export function LocationDisplay({ locationName, isUsingDefaultLocation, setManua
         </span>
       </div>
 
-      <Button
-        variant="outline"
-        size="sm"
-        className="text-xs text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 border-zinc-300 dark:border-zinc-700 bg-white/50 dark:bg-zinc-800/50 hover:bg-white dark:hover:bg-zinc-800"
-        onClick={() => setShowLocationModal(true)}
-      >
-        <PenLine className="h-3 w-3 mr-1" />
-        Change Location
-      </Button>
+      <div className="flex items-center gap-2">
+        <Button
+          variant="outline"
+          size="sm"
+          className="text-xs text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 border-zinc-300 dark:border-zinc-700 bg-white/50 dark:bg-zinc-800/50 hover:bg-white dark:hover:bg-zinc-800"
+          onClick={() => setShowLocationModal(true)}
+        >
+          <PenLine className="h-3 w-3 mr-1" />
+          Change Location
+        </Button>
+      </div>
 
       <LocationModal
         open={showLocationModal}

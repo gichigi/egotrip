@@ -14,16 +14,16 @@ export function LoadingInterstitial({ onComplete, minDuration = 6000 }: LoadingI
   const [shouldComplete, setShouldComplete] = useState(false)
 
   const messages = [
-    "Calculating sunshine coefficients...",
-    "Analyzing flight paths...",
-    "Evaluating plausible deniability factors...",
-    "Measuring executive privilege metrics...",
-    "Optimizing tan-to-meeting ratios...",
-    "Calibrating alibi believability index...",
-    "Scanning for nosy coworkers...",
-    "Identifying premium beach workspaces...",
-    "Calculating optimal sunscreen SPF...",
-    "Preparing strategic thinking excuses...",
+    "Calculating optimal sunshine coefficients",
+    "Cross-referencing flight paths with your schedule",
+    "Ensuring all recommendations meet your standards",
+    "Refining selections to match your sensibilities",
+    "Curating destinations worthy of your consideration",
+    "Analyzing atmospheric conditions for your approval",
+    "Preparing sophisticated alternatives to your current location",
+    "Verifying that each destination meets your standards",
+    "Cross-referencing exclusivity with accessibility",
+    "Finalizing selections for the discerning traveler"
   ]
 
   useEffect(() => {

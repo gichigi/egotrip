@@ -21,65 +21,58 @@ export default function Home() {
         <ThemeToggle />
       </header>
 
-      <main className="px-4 py-10 sm:py-16 max-w-6xl mx-auto">
-        <div className="grid md:grid-cols-2 gap-8 md:gap-16 items-start">
-          <div className="space-y-6 sm:space-y-8">
-            <div className="inline-flex px-3 py-1 text-xs font-medium bg-amber-400/10 text-amber-400 rounded-full">
-              It's always sunny somewhere
+      <main className="px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20 max-w-7xl mx-auto">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 xl:gap-16 items-start">
+          <div className="space-y-6 sm:space-y-8 lg:space-y-10">
+            <div className="inline-flex px-3 py-1 text-xs font-medium bg-zinc-100 text-zinc-600 dark:bg-zinc-800/50 dark:text-zinc-400 rounded-full">
+              For the discerning traveler
             </div>
 
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light tracking-tight">
-              Visionaries need their vitamin D
+            <h1 className="heading-primary">
+              For those who find bad weather rather... unacceptable.
             </h1>
 
-            <p className="text-base sm:text-lg text-zinc-400 max-w-xl">
-              EgoTrip is designed specifically for the high-performing individual (like yourself, naturally).
-              <br />
-              <br />
-              No more bouncing between the weather app and SkyScanner. No, no. We find the sunniest destinations in your
-              immediate flight radius, so you can work on your tan and your big strategic plan, all at the same time.
+            <p className="body-large text-zinc-400 max-w-2xl">
+              EgoTrip identifies the sunniest escapes within your immediate flight radius. Naturally.
             </p>
 
-            <div className="pt-2 sm:pt-4">
+            <div className="pt-4 sm:pt-6">
               <Button
-                className="w-full sm:w-auto rounded-none px-6 sm:px-8 py-5 sm:py-6 text-base bg-amber-400 text-zinc-950 hover:bg-amber-300"
+                className="w-full sm:w-auto rounded-none px-8 sm:px-10 py-6 sm:py-7 text-lg sm:text-xl bg-amber-400 text-zinc-950 hover:bg-amber-300 transition-colors"
                 onClick={handleExploreClick}
               >
-                Pivot to paradise
-                <ArrowUpRight className="ml-2 h-4 w-4" />
+                Secure your escape
+                <ArrowUpRight className="ml-2 h-5 w-5" />
               </Button>
             </div>
           </div>
 
-          <div className="bg-zinc-900 p-6 sm:p-8 border border-zinc-800 mt-4 md:mt-0">
-            <div className="space-y-6">
+          <div className="bg-zinc-900 p-6 sm:p-8 lg:p-10 border border-zinc-800 mt-8 lg:mt-0">
+            <div className="space-y-6 lg:space-y-8">
               <div className="flex items-center gap-3">
                 <div className="h-px w-12 bg-amber-400"></div>
-                <span className="text-amber-400 text-sm font-medium">SERVICES</span>
+                <span className="label text-amber-400">SERVICES</span>
               </div>
 
-              <div className="space-y-6 sm:space-y-8">
-                <div className="space-y-2">
-                  <h3 className="text-lg sm:text-xl font-medium">Strategic Sunlight Allocation</h3>
-                  <p className="text-sm sm:text-base text-zinc-400">
-                    We understand that genius requires optimal lighting. Our algorithm finds the perfect balance of
-                    sunshine and Wi-Fi strength.
+              <div className="space-y-8 lg:space-y-10">
+                <div className="space-y-3">
+                  <h3 className="heading-tertiary">Weather Intelligence</h3>
+                  <p className="body-normal text-zinc-400">
+                    We've eliminated the pedestrian process of cross-referencing weather apps. Instead, we present destinations with weather that meets your standards.
                   </p>
                 </div>
 
-                <div className="space-y-2">
-                  <h3 className="text-lg sm:text-xl font-medium">Plausible Deniability</h3>
-                  <p className="text-sm sm:text-base text-zinc-400">
-                    Automated Slack messages and email responses that suggest deep work, not deep tans. Your team will
-                    never know the difference.
+                <div className="space-y-3">
+                  <h3 className="heading-tertiary">Flight Radius Analysis</h3>
+                  <p className="body-normal text-zinc-400">
+                    Naturally, we calculate destinations within your immediate flight radius. No more settling for whatever escapes your current location provides.
                   </p>
                 </div>
 
-                <div className="space-y-2">
-                  <h3 className="text-lg sm:text-xl font-medium">Founder-Worthy Accommodations</h3>
-                  <p className="text-sm sm:text-base text-zinc-400">
-                    Properties vetted for both Instagram potential and the availability of standing desks. For
-                    appearances, of course.
+                <div className="space-y-3">
+                  <h3 className="heading-tertiary">Workspace Intelligence</h3>
+                  <p className="body-normal text-zinc-400">
+                    Curated workspaces with Wi-Fi ratings and pre-crafted alibis. The sophisticated traveler requires both connectivity and... plausible deniability.
                   </p>
                 </div>
               </div>
@@ -120,39 +113,38 @@ export default function Home() {
                 <span className="font-medium tracking-tight">EgoTrip</span>
               </div>
               <p className="text-zinc-500 text-sm">
-                Where "out of office" meets "out of excuses" and "strategic thinking" is best done with a cocktail and a
-                view.
+                For the discerning traveler who understands that weather is non-negotiable. We've prepared sophisticated alternatives for those who refuse to settle for pedestrian atmospheric conditions.
               </p>
             </div>
 
             <div className="md:col-span-2 grid grid-cols-2 md:grid-cols-3 gap-8">
               <div>
-                <h4 className="text-zinc-300 font-medium mb-3">Features</h4>
+                <h4 className="text-zinc-300 font-medium mb-3">Our Services</h4>
                 <ul className="space-y-2 text-sm text-zinc-500">
-                  <li>Sunshine Optimization</li>
+                  <li>Weather Intelligence</li>
                   <li>Flight Radius Analysis</li>
-                  <li>Plausible Deniability</li>
-                  <li>Workspace Alibis</li>
+                  <li>Workspace Intelligence</li>
+                  <li>Atmospheric Standards</li>
                 </ul>
               </div>
 
               <div>
-                <h4 className="text-zinc-300 font-medium mb-3">Resources</h4>
+                <h4 className="text-zinc-300 font-medium mb-3">For the Sophisticated</h4>
                 <ul className="space-y-2 text-sm text-zinc-500">
-                  <li>Excuse Generator</li>
-                  <li>Slack Auto-Responder</li>
-                  <li>Tan Concealer Guide</li>
-                  <li>Strategic Thinking Poses</li>
+                  <li>Curated Destinations</li>
+                  <li>Wi-Fi Ratings</li>
+                  <li>Pre-crafted Alibis</li>
+                  <li>Exclusive Access</li>
                 </ul>
               </div>
 
               <div>
-                <h4 className="text-zinc-300 font-medium mb-3">Legal</h4>
+                <h4 className="text-zinc-300 font-medium mb-3">Discretion</h4>
                 <ul className="space-y-2 text-sm text-zinc-500">
-                  <li>Plausible Deniability</li>
-                  <li>Alibi Verification</li>
                   <li>Privacy Policy</li>
                   <li>Terms of Service</li>
+                  <li>Plausible Deniability</li>
+                  <li>Confidentiality</li>
                 </ul>
               </div>
             </div>
@@ -160,8 +152,7 @@ export default function Home() {
 
           <div className="border-t border-zinc-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
             <p className="text-zinc-600 text-sm mb-4 md:mb-0">
-              © {new Date().getFullYear()} EgoTrip. Made with love in Portugal. All rights reserved while you pretend to
-              work.
+              © {new Date().getFullYear()} EgoTrip. Curated in Portugal for the discerning traveler. All rights reserved for those who refuse to settle for... pedestrian weather.
             </p>
 
             <div className="flex space-x-6">

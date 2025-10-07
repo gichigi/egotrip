@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { SunMedium, Clock, Globe, Crown } from "lucide-react"
+import { Clock, Globe, Crown } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Slider } from "@/components/ui/slider"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -11,6 +11,13 @@ import { Separator } from "@/components/ui/separator"
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet"
 import { Badge } from "@/components/ui/badge"
 import type { FilterPanelProps, FilterOptions } from "./types"
+
+// Custom circular filled sun icon component
+const SunIcon = ({ className = "h-6 w-6" }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+    <circle cx="12" cy="12" r="8" />
+  </svg>
+)
 
 // Helper function to format flight time
 const formatFlightTime = (hours: number): string => {
@@ -199,7 +206,7 @@ export const FilterPanel = ({ show, onClose, onApply, initialFilters }: FilterPa
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <SunMedium className="h-4 w-4 text-orange-500" /> {/* Updated to burning orange */}
+                    <SunIcon className="h-4 w-4 text-orange-500" /> {/* Updated to burning orange */}
                     <h3 className="text-sm font-medium text-zinc-100">Minimum Sunshine</h3>
                   </div>
                   <span className="text-sm text-zinc-400">{filters.minSunshineHours} hours/day</span>
